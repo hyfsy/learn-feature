@@ -1,0 +1,96 @@
+# 测试属性
+spring:
+  main:
+    lazy-initialization: false # 容器bean懒加载
+  devtools:
+    add-properties: true # 添加devtools内置的参数
+    restart:
+      trigger-file: trigger.txt # 指定重启触发的文件
+  mvc:
+    log-request-details: true # 打印额外日志
+  codec:
+    log-request-details: true # 打印额外日志
+  application:
+    admin:
+      enabled: true # 远程管理应用程序
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true # 缓存清除解决方案
+          paths: /** # 缓存清除解决方案
+  jmx:
+    enabled: true # 启用jmx
+    default-domain: com.hyf.fsfts # jmx相关的 mbean的默认域名前缀
+    unique-names: true # 防止多个应用上下文名称冲突
+  liveBeansView:
+    mbeanDomain: FSFTS-LIVE-BEANS-VIEW
+  security: # 端点安全相关
+    user:
+      name: actuator
+      password: actuator
+      roles: ACTUATOR_ADMIN
+  boot:
+    admin:
+      client:
+        url: http://localhost:${admin-server.port}/ # 指定 admin-server的地址
+management:
+  endpoint:
+    health:
+      show-details: always # 显示详细信息
+      show-components: always # 显示详细信息
+    shutdown:
+      enabled: true # 开启端点
+    jolokia:
+      config:
+        debug: true # 需要安装jolokia其他，没使用到
+  endpoints:
+    web:
+      exposure:
+        include: "*" # web上公开所有端点
+#      cors:
+#        allowed-origins: http://laptop-l84sksrm:8888/ # 好像没用？
+#        allowed-methods: get,post
+    jmx:
+      domain: com.hyf.fsfts # 端点相关的 mbean的默认域名前缀
+      exposure:
+        include: "*" # jmx上公开所有端点
+  server: # 端点实际上是启用了一个额外的web容器
+    port: 9999 # 管理端口
+    address: 127.0.0.1 # 管理访问地址（现在只有本机能访问）
+    servlet:
+      context-path: /actuator # 指定端点的访问路径
+  trace:
+    http:
+      enabled: true
+      include:
+        - REQUEST_HEADERS # 指定http跟踪展示信息
+        - RESPONSE_HEADERS
+        - COOKIE_HEADERS
+        - AUTHORIZATION_HEADER
+        - PRINCIPAL
+        - REMOTE_ADDRESS
+        - SESSION_ID
+        - TIME_TAKEN
+  info:
+    git:
+      mode: full # 查看git详细的信息
+
+info: # info端点配置自定义信息
+  aaa: 111
+  bbb: 222
+  ccc: 333
+  jj: ${java.version} # 引用pom.xml中的
+  java-version: @java.version@
+  groupId: @project.groupId@
+  artifactId: @project.artifactId@
+  version: @project.version@
+#  projectName: @project.name@
+#  description: @project.description@
+
+admin-server:
+  port: 8890
+
+
+# http://localhost:8081/actuator/health
+
